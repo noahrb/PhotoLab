@@ -119,6 +119,24 @@ public class Picture extends SimplePicture
     } 
   }
   
+  public void mirrorVerticalRightToLeft()
+  {
+	  //Samesetup for LtR
+	  Pixel [][] pixels = this.getPixels2D();
+	  Pixel leftPixel = null;
+	  Pixel rightPixel = null;
+	  int width = pixels[0].length;
+	  
+	  for (int row = pixels.length -1; row >= 0; row--)
+	  {
+		  for (int col = width / 2 - 1; col >= 0; col--)
+		  {
+			  leftPixel = pixels[row][col];
+			  rightPixel = pixels[row][width - col - 1];
+			  leftPixel.setColor(rightPixel.getColor());
+		  }
+	  }
+  }
   /** Mirror just part of a picture of a temple */
   public void mirrorTemple()
   {
@@ -191,7 +209,103 @@ public class Picture extends SimplePicture
     this.write("collage.jpg");
   }
   
+  public void fullRandom()
+  {
+	  Pixel [][] currentPicture = this.getPixels2D();
+	  for (Pixel [] row : currentPicture)
+	  {
+		  for (Pixel currentPixel : row)
+		  {
+			  int red = (int) (Math.random() * 256);
+			  int green = (int) (Math.random() * 256);
+			  int blue = (int) (Math.random() * 256);
+			  
+			  currentPixel.setColor(new Color(red, green, blue));
+		  }
+	  }
+  }
   
+  public void fullRandomGreen()
+  {
+	  Pixel [][] currentPicture = this.getPixels2D();
+	  for (Pixel [] row : currentPicture)
+	  {
+		  for (Pixel currentPixel : row)
+		  {
+			  int green = (int) (Math.random() * 256);
+			  
+			  currentPixel.setColor(new Color(currentPixel.getRed(), green, currentPixel.getBlue()));
+			  //or 
+			//  currentPixel.setGreen(green);
+		  }
+	  }
+  }
+  
+  public void fullRandomRed()
+  {
+	  Pixel [][] currentPicture = this.getPixels2D();
+	  for (Pixel [] row : currentPicture)
+	  {
+		  for (Pixel currentPixel : row)
+		  {
+			  int red = (int) (Math.random() * 256);
+			  
+			  currentPixel.setColor(new Color(red, currentPixel.getRed(), currentPixel.getBlue()));
+			  //or 
+			//  currentPixel.setRed(red);
+		  }
+	  }
+  }
+  
+  public void removeOpacityRed()
+  {
+	  Pixel [][] currentPicture = this.getPixels2D();
+	  for (Pixel [] row : currentPicture)
+	  {
+		  for (Pixel currentPixel : row)
+		  {
+			  if(currentPixel.getRed() > 175)
+			  {
+				  currentPixel.setAlpha(0);
+			  }
+		  }
+	  }
+  }
+  
+  public void aestheticRed()
+  {
+	  Pixel [][] currentPicture = this.getPixels2D();
+	  for (Pixel [] row : currentPicture)
+	  {
+		  for (Pixel currentPixel : row)
+		  {
+			  if(currentPixel.getRed() > 160)
+			  {
+				  currentPixel.setColor(new Color(255, 14, 235));
+			  }
+		  }
+	  }
+  }
+  
+  public void aestheticGreen()
+  {
+	  Pixel [][] currentPicture = this.getPixels2D();
+	  for (Pixel [] row : currentPicture)
+	  {
+		  for (Pixel currentPixel : row)
+		  {
+			  if(currentPixel.getGreen() > 120)
+			  {
+				  currentPixel.setColor(new Color(14, 255, 42));
+			  }
+		  }
+	  }
+  }
+  
+  public void aestheticTextGenerator()
+  {
+	  
+  }
   /** Method to show large changes in color 
     * @param edgeDist the distance for finding edges
     */
@@ -218,7 +332,29 @@ public class Picture extends SimplePicture
     }
   }
   
-  
+  public void edgeDetectionJr(int edgeDist)
+  {
+    Pixel leftPixel = null;
+    Pixel rightPixel = null;
+    Pixel[][] pixels = this.getPixels2D();
+    Color rightColor = null;
+    for (int row = 0; row < pixels.length; row++)
+    {
+      for (int col = 0; 
+           col < pixels[0].length-1; col++)
+      {
+        leftPixel = pixels[row][col];
+        rightPixel = pixels[row][col+1];
+        rightColor = rightPixel.getColor();
+        if (leftPixel.colorDistance(rightColor) > 
+            edgeDist)
+          leftPixel.setColor(Color.BLACK);
+        else
+          leftPixel.setColor(Color.WHITE);
+      }
+    }
+  }
+    
   /* Main method for testing - each class in Java can have a main 
    * method 
    */
@@ -226,7 +362,8 @@ public class Picture extends SimplePicture
   {
     Picture beach = new Picture("beach.jpg");
     beach.explore();
-    beach.zeroBlue();
+    beach.aestheticRed();
+    beach.aestheticGreen();
     beach.explore();
   }
   

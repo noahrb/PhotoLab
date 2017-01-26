@@ -35,7 +35,7 @@ public class PictureTester
     temple.mirrorTemple();
     temple.explore();
   }
-  
+ 
   /** Method to test the collage method */
   public static void testCollage()
   {
